@@ -18,14 +18,12 @@ export default function GPXUploader({ onClose }: { onClose: () => void }) {
 
     setLoading(true);
 
-    // Per ora simuliamo il parsing GPX
-    // In produzione useremo una libreria come @tmcw/togeojson
     const mockRoute: Route = {
       id: Date.now().toString(),
       userId: user.id,
       title,
       description,
-      distance: Math.random() * 100 + 50, // Mock distance 50-150km
+      distance: Math.random() * 100 + 50,
       points: [
         { lat: 45.4642, lng: 9.1900 },
         { lat: 45.5842, lng: 9.2500 },
@@ -43,7 +41,6 @@ export default function GPXUploader({ onClose }: { onClose: () => void }) {
 
     addRoute(mockRoute);
     
-    // Create a post about the route
     const routePost = {
       id: Date.now().toString() + '_post',
       authorId: user.id,
@@ -64,8 +61,8 @@ export default function GPXUploader({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style={{ zIndex: 9999 }}>
+      <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4" style={{ zIndex: 10000 }}>
         <h2 className="text-xl font-bold mb-4">Carica Percorso GPX</h2>
         
         <form onSubmit={handleSubmit}>
