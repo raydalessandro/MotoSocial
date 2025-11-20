@@ -26,7 +26,7 @@ export default function FeedPage() {
         <div className="max-w-4xl mx-auto p-4 flex justify-between items-center">
           <h1 className="text-xl font-bold">🏍️ MotoSocial</h1>
           <div className="flex items-center gap-4">
-            <button className="text-gray-600">🗺️</button>
+            <a href="/explore" className="text-gray-600
             <button className="text-gray-600">👥</button>
             <button className="text-gray-600">🔔</button>
             <div className="flex items-center gap-2">
