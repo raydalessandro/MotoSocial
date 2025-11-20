@@ -31,6 +31,10 @@ export default function CreatePost() {
     setIsOpen(false);
   };
 
+  const handleRouteClick = () => {
+    window.location.href = '/explore';
+  };
+
   return (
     <div className="bg-white rounded-lg shadow p-4 mb-4">
       {!isOpen ? (
@@ -60,6 +64,7 @@ export default function CreatePost() {
               </button>
               <button
                 type="button"
+                onClick={handleRouteClick}
                 className="px-3 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300"
               >
                 📍 Percorso
