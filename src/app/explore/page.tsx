@@ -1,12 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppStore } from '@/stores/app.store';
 import dynamic from 'next/dynamic';
 import GPXUploader from '@/components/routes/GPXUploader';
 
-// Import dinamico per evitare errori SSR con Leaflet
 const RouteMap = dynamic(() => import('@/components/routes/RouteMap'), {
   ssr: false,
   loading: () => <div className="h-96 bg-gray-200 animate-pulse rounded-lg" />
@@ -17,15 +16,35 @@ export default function ExplorePage() {
   const routes = useAppStore((state) => state.routes);
   const router = useRouter();
   const [showUpload, setShowUpload] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  if (!user) {
-    router.push('/login');
-    return null;
+  useEffect(() => {
+    // Aspetta un attimo per l'idratazione dello store
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      if (!user) {
+        router.push('/login');
+      }
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, [user, router]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-2xl mb-2">🏍️</div>
+          <p>Caricamento...</p>
+        </div>
+      </div>
+    );
   }
+
+  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Navigation */}
       <nav className="bg-white shadow mb-4">
         <div className="max-w-6xl mx-auto p-4 flex justify-between items-center">
           <h1 className="text-xl font-bold">🏍️ MotoSocial</h1>
@@ -42,7 +61,6 @@ export default function ExplorePage() {
         </div>
       </nav>
 
-      {/* Map Section */}
       <div className="max-w-6xl mx-auto p-4">
         <div className="bg-white rounded-lg shadow p-4">
           <h2 className="text-lg font-semibold mb-4">
@@ -51,7 +69,6 @@ export default function ExplorePage() {
           <RouteMap routes={routes} height="500px" />
         </div>
 
-        {/* Routes List */}
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {routes.map((route) => (
             <div key={route.id} className="bg-white rounded-lg shadow p-4">
@@ -81,7 +98,6 @@ export default function ExplorePage() {
         </div>
       </div>
 
-      {/* Upload Modal */}
       {showUpload && <GPXUploader onClose={() => setShowUpload(false)} />}
     </div>
   );
